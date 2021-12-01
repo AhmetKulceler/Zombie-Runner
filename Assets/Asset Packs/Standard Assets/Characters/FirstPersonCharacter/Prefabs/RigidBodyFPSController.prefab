@@ -301,6 +301,23 @@ MonoBehaviour:
     slowDownRate: 20
     airControl: 0
     shellOffset: 0
+--- !u!114 &1018647124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183448735161812262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d52143d6cac713a4a8c52ea15c2c8b43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FPCamera: {fileID: 2000000}
+  muzzleFlash: {fileID: 4076979852547290322}
+  hitEffect: {fileID: 5408293114015414591, guid: 3f758c71e22785149b3a26dd0c5f12fc, type: 3}
+  weaponRange: 100
+  weaponDamage: 20
 --- !u!1 &6773248509763610925
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,8 +442,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 689946d975a0e55449b1e7ae41933e73, type: 3}
+--- !u!1 &1183448735161812262 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1117582899397640, guid: 689946d975a0e55449b1e7ae41933e73, type: 3}
+  m_PrefabInstance: {fileID: 1184319387198112046}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1180464509741607990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4035219142733080, guid: 689946d975a0e55449b1e7ae41933e73, type: 3}
+  m_PrefabInstance: {fileID: 1184319387198112046}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4076979852547290322 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2953195486901450236, guid: 689946d975a0e55449b1e7ae41933e73, type: 3}
   m_PrefabInstance: {fileID: 1184319387198112046}
   m_PrefabAsset: {fileID: 0}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     [SerializeField] Camera FPCamera;
+    [SerializeField] ParticleSystem muzzleFlash;
+    [SerializeField] GameObject hitEffect;
     [SerializeField] float weaponRange = 100f;
     [SerializeField] float weaponDamage = 20f;
 
@@ -18,17 +21,32 @@ public class Weapon : MonoBehaviour
 
     private void Shoot()
     {
+        PlayMuzzleFlash();
+        ProcessRaycast();
+    }
+
+    private void PlayMuzzleFlash()
+    {
+        muzzleFlash.Play();
+    }
+
+    private void ProcessRaycast()
+    {
         RaycastHit hit;
         if (Physics.Raycast(FPCamera.transform.position, FPCamera.transform.forward, out hit, weaponRange))
         {
-            Debug.Log(hit.transform.name);
-            // TODO: add some hit effect for visual players
+            CreateHitImpact(hit);
+            EnemyHealth enemy = hit.transform.GetComponent<EnemyHealth>();
 
-            EnemyHealth enemyTarget = hit.transform.GetComponent<EnemyHealth>();
-
-            if (enemyTarget == null) return;
-            enemyTarget.TakeDamage(weaponDamage);
+            if (enemy == null) return;
+            enemy.TakeDamage(weaponDamage);
         }
         else return;
+    }
+
+    private void CreateHitImpact(RaycastHit hit)
+    {
+        GameObject impact = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
+        Destroy(impact, .1f);
     }
 }
