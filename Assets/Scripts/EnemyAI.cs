@@ -5,8 +5,9 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] Transform target;
+    PlayerHealth target;
     [SerializeField] float chaseRange = 10f;
+    [SerializeField] float turnSpeed = 5f;
 
     NavMeshAgent navMeshAgent;
     float distanceToTarget = Mathf.Infinity;
@@ -15,11 +16,12 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        target = FindObjectOfType<PlayerHealth>();
     }
 
     void Update()
     {
-        distanceToTarget = Vector3.Distance(target.position, transform.position);
+        distanceToTarget = Vector3.Distance(target.gameObject.transform.position, transform.position);
 
         if(isProvoked)
         {
@@ -35,6 +37,7 @@ public class EnemyAI : MonoBehaviour
 
     private void EngageTarget()
     {
+        FaceTarget();
         if (distanceToTarget >= navMeshAgent.stoppingDistance)
         {
             ChaseTarget();
@@ -47,12 +50,22 @@ public class EnemyAI : MonoBehaviour
 
     private void ChaseTarget()
     {
-        navMeshAgent.SetDestination(target.position);
+        GetComponent<Animator>().SetBool("attack", false);
+        GetComponent<Animator>().SetTrigger("move");
+
+        navMeshAgent.SetDestination(target.gameObject.transform.position);
     }
 
     private void AttackTarget()
+    {        
+        GetComponent<Animator>().SetBool("attack", true);
+    }
+
+    private void FaceTarget()
     {
-        Debug.Log("Give me your brain!");
+        Vector3 direction = (target.gameObject.transform.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, turnSpeed * Time.deltaTime);
     }
 
     void OnDrawGizmosSelected()
