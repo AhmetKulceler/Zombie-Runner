@@ -2,27 +2,47 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Weapon : MonoBehaviour
 {
     [SerializeField] Camera FPCamera;
     [SerializeField] ParticleSystem muzzleFlash;
     [SerializeField] GameObject hitEffect;
+    [SerializeField] Ammo ammoSlot;
+    [SerializeField] AmmoType ammoType;
     [SerializeField] float weaponRange = 100f;
     [SerializeField] float weaponDamage = 20f;
+    [SerializeField] float delayBetweenShots = 0.5f;
+    [SerializeField] TextMeshProUGUI ammoText;
+
+    bool canShoot = true;
+
+    private void OnEnable()
+    {
+        canShoot = true;
+    }
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        DisplayAmmo();
+        if (Input.GetMouseButtonDown(0) && canShoot)
         {
-            Shoot();
+            if (ammoSlot.GetCurrentAmmo(ammoType) <= 0) return;
+            StartCoroutine(Shoot());
         }
     }
 
-    private void Shoot()
+    IEnumerator Shoot()
     {
+        canShoot = false;
+
         PlayMuzzleFlash();
         ProcessRaycast();
+        ammoSlot.ReduceCurrentAmmo(ammoType);
+
+        yield return new WaitForSeconds(delayBetweenShots);
+        canShoot = true;
     }
 
     private void PlayMuzzleFlash()
@@ -48,5 +68,11 @@ public class Weapon : MonoBehaviour
     {
         GameObject impact = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
         Destroy(impact, .1f);
+    }
+
+    private void DisplayAmmo()
+    {
+        int currentAmmo = ammoSlot.GetCurrentAmmo(ammoType);
+        ammoText.text = currentAmmo.ToString();
     }
 }
